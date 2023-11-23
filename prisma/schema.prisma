@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// schema.prisma
+
+// ユーザーテーブル
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  mysteries Mystery[]
+  createdAt    DateTime @default(now()) @map("createdAt")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updatedAt")
+}
+
+// 謎テーブル
+model Mystery {
+  id          Int      @id @default(autoincrement())
+  title       String
+  imageUrl    String
+  difficulty  Int
+  explanation String
+  userId      Int 
+  user        User @relation(fields: [userId],references: [id])
+  tags        Tagging[]  // 謎とタグの中間テーブルとの関連性を表現するリレーション
+  createdAt    DateTime @default(now()) @map("createdAt")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updatedAt")
+}
+
+// タグテーブル
+model Tag {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  taggings Tagging[]  // タグと謎の中間テーブルとの関連性を表現するリレーション
+  createdAt    DateTime @default(now()) @map("createdAt")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updatedAt")
+}
+
+// 謎とタグの中間テーブル
+model Tagging {
+  id      Int      @id @default(autoincrement())
+  mystery Mystery  @relation(fields: [mysteryId], references: [id])
+  tag     Tag      @relation(fields: [tagId], references: [id])
+  mysteryId Int
+  tagId     Int
+  createdAt    DateTime @default(now()) @map("createdAt")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updatedAt")
+  @@unique([mysteryId, tagId])
+}
+
