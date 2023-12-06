@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import prisma from '@/services/prisma'
 
 
-// モデル名を PrismaClient の Class から取るようにしています。こうするとモデルが増えても勝手に型定義もアップデートされるからです。(先頭に "$" が付いているのが PrismaClient の関数でそれ以外に生えてるプロパティが schema.prisma から生成されたモデルの名前です)
 type FilterStartsWith<
   Union,
   Prefix extends string

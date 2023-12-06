@@ -5,55 +5,82 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
+
+
 
 // schema.prisma
 
 // ユーザーテーブル
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+model Profile {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  userId    String     @unique
   name      String?
   mysteries Mystery[]
-  createdAt    DateTime @default(now()) @map("createdAt")
-  updatedAt    DateTime @default(now()) @updatedAt @map("updatedAt")
+  createdAt DateTime   @default(now()) @map("createdAt")
+  updatedAt DateTime   @default(now()) @updatedAt @map("updatedAt")
+  favoriteMysteries  Favorite[]
 }
 
 // 謎テーブル
 model Mystery {
-  id          Int      @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   title       String
   imageUrl    String
   difficulty  Int
   explanation String
-  userId      Int 
-  user        User @relation(fields: [userId],references: [id])
-  tags        Tagging[]  // 謎とタグの中間テーブルとの関連性を表現するリレーション
-  createdAt    DateTime @default(now()) @map("createdAt")
-  updatedAt    DateTime @default(now()) @updatedAt @map("updatedAt")
+  profileId   Int
+  profile     Profile       @relation(fields: [profileId], references: [id] ,onDelete: Cascade)
+  tags        Tagging[] // 謎とタグの中間テーブルとの関連性を表現するリレーション
+  createdAt   DateTime   @default(now()) @map("createdAt")
+  updatedAt   DateTime   @default(now()) @updatedAt @map("updatedAt")
+  Favorite    Favorite[]
+
+  @@index([profileId])
 }
 
 // タグテーブル
 model Tag {
-  id    Int     @id @default(autoincrement())
-  name  String  @unique
-  taggings Tagging[]  // タグと謎の中間テーブルとの関連性を表現するリレーション
-  createdAt    DateTime @default(now()) @map("createdAt")
-  updatedAt    DateTime @default(now()) @updatedAt @map("updatedAt")
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  taggings  Tagging[] // タグと謎の中間テーブルとの関連性を表現するリレーション
+  createdAt DateTime  @default(now()) @map("createdAt")
+  updatedAt DateTime  @default(now()) @updatedAt @map("updatedAt")
 }
 
 // 謎とタグの中間テーブル
 model Tagging {
-  id      Int      @id @default(autoincrement())
-  mystery Mystery  @relation(fields: [mysteryId], references: [id])
-  tag     Tag      @relation(fields: [tagId], references: [id])
+  id        Int      @id @default(autoincrement())
+  mystery   Mystery  @relation(fields: [mysteryId], references: [id],onDelete: Cascade)
+  tag       Tag      @relation(fields: [tagId], references: [id],onDelete: Cascade)
   mysteryId Int
   tagId     Int
-  createdAt    DateTime @default(now()) @map("createdAt")
-  updatedAt    DateTime @default(now()) @updatedAt @map("updatedAt")
+  createdAt DateTime @default(now()) @map("createdAt")
+  updatedAt DateTime @updatedAt
+  @@index([mysteryId])
+  @@index([tagId])
   @@unique([mysteryId, tagId])
 }
+// 謎とユーザーのお気に入りテーブル
+model Favorite {
+  id        Int      @id @default(autoincrement())
+  mystery   Mystery  @relation(fields: [mysteryId], references: [id] ,onDelete: Cascade)
+  profile   Profile  @relation(fields: [profileId], references: [id] ,onDelete: Cascade)
+  mysteryId Int
+  profileId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  @@index([mysteryId])
+  @@index([profileId])
+}

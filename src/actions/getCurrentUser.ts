@@ -1,20 +1,18 @@
-
 // import { getServerSession } from "next-auth/next"
 import prisma from '@/services/prisma'
 // import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
-const getMysteries = async () => {
-  const mysteries = await prisma.mystery.findMany({
+const getCurrentUsers = async () => {
+  const mysteries = await prisma.user.findMany({
     include: {
-      tags: {
+      favoriteMysteries: {
         include: {
-          tag: true
+          mystery: true
         }
       },
+      mysteries: true
     }
   });
   console.log(mysteries)
   return mysteries
 }
-
-export default getMysteries
