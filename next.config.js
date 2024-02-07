@@ -16,6 +16,7 @@ const nextConfig = {
         pathname: '/random',
       },
     ],
+    domains: ['uploadthing.com','utfs.io']
   },
 };
 

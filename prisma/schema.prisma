@@ -38,6 +38,7 @@ model Mystery {
   title       String
   imageUrl    String
   difficulty  Int
+  answer      String
   explanation String
   profileId   Int
   profile     Profile       @relation(fields: [profileId], references: [id] ,onDelete: Cascade)
@@ -53,6 +54,7 @@ model Mystery {
 model Tag {
   id        Int       @id @default(autoincrement())
   name      String    @unique
+  color     String    
   taggings  Tagging[] // タグと謎の中間テーブルとの関連性を表現するリレーション
   createdAt DateTime  @default(now()) @map("createdAt")
   updatedAt DateTime  @default(now()) @updatedAt @map("updatedAt")

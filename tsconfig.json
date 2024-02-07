@@ -25,10 +25,10 @@
     ],
     "paths": {
       "@/*": [
-        "./src/*"
+        "./app/*"
       ],
       "@/components/": [
-        "./src/components/*"
+        "./app/components/*"
       ],
 
     }
