@@ -10,6 +10,7 @@ export const MysteryDefaultAttributes: Prisma.MysteryCreateInput = {
   explanation: faker.string.sample(),
   createdAt: faker.date.anytime(),
   updatedAt: faker.date.anytime(),
+  answer: faker.string.sample(),
   profile:{},
   tags: {}
 };
