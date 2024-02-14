@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import * as z from 'zod'
-import { Modal, Button, TextInput, ColorPicker, Textarea, LoadingOverlay } from '@mantine/core';
+import { Modal, Button, TextInput, ColorInput, Text, LoadingOverlay } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { createFormActions, createFormContext } from '@mantine/form';
 import { zodResolver } from '@mantine/form';
@@ -45,16 +45,21 @@ function ContextField() {
       {/* tag name */}
       <TextInput
         required
-        label="Name"
+        label="ラベル"
         placeholder="Enter your name"
         onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
         value={form.values.name}
       />
       {/* color picker */}
-      <ColorPicker
-        swatches={BASE_COLORS}
-        value={form.values.color}
-        onChange={(value) => form.setFieldValue('answer', value)} />
+      <div className='mt-2 flex justify-center w-full'>
+        <ColorInput
+          required
+          label="色"
+          classNames={{ root:'w-full'}}
+          swatches={BASE_COLORS}
+          value={form.values.color}
+          onChange={(value) => form.setFieldValue('color', value)} />
+      </div>
     </>
   );
 }
@@ -71,7 +76,7 @@ const ResistMysteryModal: React.FC<ResistTagModalProps> = (props) => {
   })
 
   const [opened, { open, close }] = useDisclosure();
-  const [visible, { open:toggleOpen,close:toggleClose }] = useDisclosure();
+  const [visible, { open: toggleOpen, close: toggleClose }] = useDisclosure();
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     toggleOpen()
@@ -95,23 +100,21 @@ const ResistMysteryModal: React.FC<ResistTagModalProps> = (props) => {
   return (
     <>
       <Modal opened={opened} onClose={close}>
-        <Modal.Title className='flex text-center w-full justify-center'>save mystery</Modal.Title>
+        <Modal.Title className='flex text-center w-full justify-center'>タグ登録</Modal.Title>
         <Modal.Body>
           <LoadingOverlay visible={visible} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
           <FormProvider form={form}>
             <form onSubmit={form.onSubmit(onSubmit)}>
               <ContextField />
-              <div className='flex justify-center gap-5 ' >
+              <div className='flex justify-center gap-5 mt-8' >
                 <Button type="submit" variant="light" color="blue">登録</Button>
+                <Button onClick={close} variant='outline'>閉じる</Button>
               </div>
             </form>
           </FormProvider>
         </Modal.Body>
-        <div className='flex justify-center gap-5 sticky bottom-0 left-0 right-0 bg-white z-10' >
-          <Button onClick={close}>Close</Button>
-        </div>
       </Modal>
-      <Button onClick={open}>tag登録</Button>
+      <Button onClick={open} size='compact-sm' color='grape' variant='outline'>タグ登録</Button>
     </>
   );
 };

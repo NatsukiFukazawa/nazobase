@@ -3,7 +3,11 @@
 import { UploadDropzone } from "@/utils/uploadthing";
 import { OurFileRouter } from "@/api/uploadthing/core";
 import Image from "next/image";
+import { CloseButton } from '@mantine/core';
 
+function Demo() {
+  return
+}
 import "@uploadthing/react/styles.css"
 import { Button } from "@mantine/core";
 
@@ -20,12 +24,12 @@ const FileUpload = (props: FileUploadProps) => {
 
   if (value && fileType !== 'pdf') {
     return (
-      <>
-        <Button className='absolute top-0 left-0' onClick={() => onChange(undefined)}>削除</Button >
-        <div className="w-20 h-30 flex justify-center">
+      <div className="relative">
+        <CloseButton variant="transparent" className='abusolute top-0 right-0' onClick={() => onChange(undefined)} />
+        <div className="flex justify-center">
           <Image width={200} height={200} src={value} alt='upload' />
         </div>
-      </>
+      </div>
     )
   }
 

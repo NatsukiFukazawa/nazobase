@@ -1,36 +1,33 @@
 'use client'
 import Image from 'next/image';
+import { MysteryDetailModal } from '@/components/modals/MysteryDetailModal';
+import { useState } from 'react';
+import { Mystery } from '@/models/Mystery';
+import { useDisclosure } from '@mantine/hooks';
 
-export interface Mystery {
-  id: number;
-  imageUrl: string;
-  title: string;
-  difficulty: number;
-  explanation: string;
-  tags: Tag[];
-}
-interface Tag {
-  id: number;
-  name: string;
-}
 
 export interface MysteriesProps {
   mysteries: Mystery[];
 }
 
 function Mysteries({ mysteries }: MysteriesProps) {
+  const [selectedMystery, setSelectedMystery] = useState<Mystery | null>(null);
+  const [opened, { open, close }] = useDisclosure();
   return (
-    <div className='w-full flex gap-4'>
-      {mysteries.map((mystery) => (
-        <div key={mystery.id} className='w-36'>
-          <Image priority={false} src={mystery.imageUrl} alt={mystery.title} width={300} height={200} /> 
-          <h3>{mystery.title}</h3>
-          <p>難易度: {mystery.difficulty}</p>
-          <p>解説: {mystery.explanation}</p>
-          <p>タグ: {mystery.tags.map(tag=>tag.name).join(', ')}</p>
-        </div>
-      ))}
-    </div>
+    <>
+      <div className='flex gap-4 flex-wrap'>
+        {mysteries.map((mystery) => (
+          <div className='w-[150px]' key={mystery.id}>
+            <div className='h-[180px] flex items-center'>
+              <span onClick={() => { setSelectedMystery(mystery); open() }} className='align-middle'>
+                <Image priority={false} src={mystery.imageUrl} alt={mystery.title} width={300} height={200} className='object-contain' /></span>
+            </div>
+            <p>難易度: {mystery.difficulty}</p>
+          </div>
+        ))}
+      </div>
+      <MysteryDetailModal open={open} opened={opened} mystery={selectedMystery} onClose={() => close()} />
+    </>
   );
 }
 

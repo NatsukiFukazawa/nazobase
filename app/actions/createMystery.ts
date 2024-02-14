@@ -13,10 +13,13 @@ interface Mystery {
 
 export const createMystery = async (mystery: Mystery) => {
   const {userId,...rest} = mystery
+  console.log(rest)
   const payload: Prisma.MysteryCreateInput = {
     ...rest,
     tags: {
-      connect: mystery.tags.map((tag) => ({ id: Number(tag) }))
+      create:[
+        ...mystery.tags.map((tag) => ({ tagId: Number(tag) }))
+      ]
     },
     profile: {
       connect: { userId: mystery.userId }

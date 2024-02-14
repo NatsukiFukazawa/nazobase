@@ -1,40 +1,42 @@
 import { FC } from "react";
-import Mysteries, { Mystery } from "../../components/organisms/Mysteries";
-import RegistMysteryModal from "@/components/modals/RegistMysteryModal";
-import RegistTagModal from "@/components/modals/RegistTagModal";
-import ClientOnly from "../../components/ClientOnly";
-import getMysteries from "../../actions/getMysteries";
-import getTags from "../../actions/getTags";
-// import { createMock } from "@/test/factory/Factories";
+import Mysteries from "@/components/organisms/Mysteries";
+import { UserPageHeader } from "@/components/organisms/UserPageHeader";
+import { UserPageNav } from "@/components/organisms/UserPageNav";
+import ClientOnly from "@/components/ClientOnly";
+import getMysteries from "@/actions/getMysteries";
+import getTags from "@/actions/getTags";
+import { Mystery } from "@/models/Mystery";
 
 const UserMainPage: FC = async () => {
 
   const res = await getMysteries()
-  const mysteries: Mystery[] = res.map(mystery => ({
+  let mysteries: Mystery[] = res.map(mystery => ({
     id: mystery.id,
     imageUrl: mystery.imageUrl,
     title: mystery.title,
     difficulty: mystery.difficulty,
     explanation: mystery.explanation,
-    tags: mystery.tags.map((tag) => ({ id: tag.tag.id, name: tag.tag.name }))
+    answer: mystery.answer,
+    tags: mystery.tags.map((tag) => ({ id: tag.tag.id, name: tag.tag.name,color: tag.tag.color }))
   }))
   const tags = await getTags()
 
+  const user = null
 
   return (
-    <>
+    <div className='h-full'>
       <ClientOnly>
-        <div>
-          <Mysteries mysteries={mysteries} />
-        </div>
-        <div>
-          <RegistMysteryModal tags={tags} />
-        </div>
-        <div>
-          <RegistTagModal/>
+        <div className="flex h-full">
+          <UserPageNav />
+          <div style={{ width: '-webkit-fill-available' }}>
+            <UserPageHeader user={user} signed={true} tags={tags} />
+            <div className="m-1">
+              <Mysteries mysteries={mysteries} />
+            </div>
+          </div>
         </div>
       </ClientOnly>
-    </>
+    </div>
   )
 };
 

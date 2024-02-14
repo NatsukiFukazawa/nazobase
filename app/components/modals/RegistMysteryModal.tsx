@@ -12,6 +12,7 @@ import { createMystery } from '@/actions/createMystery';
 
 interface ResistMysteryModalProps {
   tags: db.Tag[];
+  mysteryCreated?: () => void;
 }
 
 interface Tag {
@@ -64,14 +65,14 @@ function ContextField({ allTags }: { allTags: Tag[] }) {
     <>
       <TextInput
         required
-        label="Name"
+        label="タイトル"
         placeholder="Enter your name"
         onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
         value={form.values.name}
       />
       <MultiSelect
         required
-        label="Tags"
+        label="タグ"
         placeholder="set tags"
         onChange={(value) => form.setFieldValue('tags', value)}
         value={form.values.tags}
@@ -87,17 +88,17 @@ function ContextField({ allTags }: { allTags: Tag[] }) {
         required
         max={10}
         min={1}
-        label="Difficulty"
+        label="難易度"
         value={form.values.difficulty}
         onChange={(event) => form.setFieldValue('difficulty', Number(event))}
       />
       <Textarea
         required
-        label="Answer"
+        label="答え"
         value={form.values.answer}
         onChange={(event) => form.setFieldValue('answer', event.currentTarget.value)} />
       <Textarea
-        label="Explanation"
+        label="解説"
         value={form.values.explanation}
         onChange={(event) => form.setFieldValue('explanation', event.currentTarget.value)}
       />
@@ -107,16 +108,16 @@ function ContextField({ allTags }: { allTags: Tag[] }) {
 
 
 const ResistMysteryModal: React.FC<ResistMysteryModalProps> = (props) => {
-  const { tags } = props;
-  const convertedTags: Tag[] = tags.map((tag) => ({ value: tag.name, label: tag.name, color: tag.color }))
+  const { tags ,mysteryCreated} = props;
+  const convertedTags: Tag[] = tags.map((tag) => ({ value: String(tag.id), label: tag.name, color: tag.color }))
   const form = useForm({
     name: FORM,
     initialValues: {
-      name: '',
-      imageUrl: 'https://utfs.io/f/5915b52a-c33d-4b1a-8785-4ff734041728-1d.png',
+      name: '初めて',
+      imageUrl: 'https://utfs.io/f/b274cb97-6bd9-4980-a216-2a0800ae704b-1e.svg',
       difficulty: 1,
-      explanation: '',
-      answer: '',
+      explanation: 'test',
+      answer: 'おしろ',
       tags: [],
     },
     validate: zodResolver(schema),
@@ -139,28 +140,28 @@ const ResistMysteryModal: React.FC<ResistMysteryModalProps> = (props) => {
       userId: user.userId
     }
     await createMystery(payload)
+    mysteryCreated?.()
+    close()
   }
 
   return (
     <>
       <Modal opened={opened} onClose={close}>
-        <Modal.Title className='flex text-center w-full justify-center'>save mystery</Modal.Title>
+        <Modal.Title className='flex text-center w-full justify-center'>謎登録</Modal.Title>
         <Modal.Body>
           <LoadingOverlay visible={visible} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
           <FormProvider form={form}>
             <form onSubmit={form.onSubmit(onSubmit)}>
               <ContextField allTags={convertedTags} />
-              <div className='flex justify-center gap-5 ' >
-                <Button type="submit" variant="light" color="blue">Submit</Button>
+              <div className='flex justify-evenly mt-1' style={{justifyContent:'space-evenly',marginTop:'16px'}}>
+                <Button type="submit" variant="light" color="blue">登録</Button>
+                <Button onClick={close} variant='outline'>閉じる</Button>
               </div>
             </form>
           </FormProvider>
         </Modal.Body>
-        <div className='flex justify-center gap-5 sticky bottom-0 left-0 right-0 bg-white z-10' >
-          <Button onClick={close}>Close</Button>
-        </div>
       </Modal>
-      <Button onClick={open}>登録</Button>
+      <Button onClick={open} size='compact-sm' color='indigo' variant='outline'>謎登録</Button>
     </>
   );
 };
