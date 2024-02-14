@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { currentUser, auth } from "@clerk/nextjs";
-import prisma, { Profile } from '@/services/prisma'
+import prisma from '@/services/prisma'
 
 export async function GET() {
 
@@ -15,7 +15,6 @@ export async function GET() {
     where: {
       userId
     }
-  }) as Profile
-  console.log(dbUser)
+  })
   return NextResponse.json({ "user": dbUser }, { status: 200 })
 }

@@ -29,7 +29,6 @@ function buildPrismaIncludeFromAttrs(attrs: Record<string, any>) {
   return hasInclude ? include : undefined;
 }
 
-// ここでモデル名とデフォルトの値を渡すと、それに基づいた Factory 関数を返します。
 export const createFactory = <CreateInputType, ModelType>(
   modelName: ModelName,
   defaultAttributes: CreateInputType

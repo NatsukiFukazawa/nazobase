@@ -1,14 +1,17 @@
 'use client'
 import React from 'react';
 import * as z from 'zod'
-import { Modal, Button, TextInput, MultiSelect, NumberInput, Textarea, LoadingOverlay } from '@mantine/core';
+import { Modal, Button, Input, TextInput, NumberInput, Textarea, LoadingOverlay } from '@mantine/core';
 import db from '@prisma/client'
 import { useDisclosure } from '@mantine/hooks';
+import { useRouter } from 'next/navigation';
 import FileUpload from "@/components/molecules/FileUpload"
 import { createFormActions, createFormContext } from '@mantine/form';
 import { zodResolver } from '@mantine/form';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { createMystery } from '@/actions/createMystery';
+import { SearchableMultiSelect } from '@/components/atoms/MultiSelect';
+import { notifications } from '@mantine/notifications';
 
 interface ResistMysteryModalProps {
   tags: db.Tag[];
@@ -47,16 +50,16 @@ const schema = z.object({
   answer: z.string().max(200, { message: 'Too long' }),
 })
 
-const SeletedItem = (value: Tag) => {
-  return (
-    <div className='flex justify-between w-full'>
-      <span>{value.label}</span>
-    </div>
-  )
-}
-
 
 const [FormProvider, useFormContext, useForm] = createFormContext<FormValues>();
+
+
+const itemComponent = (value: Tag) => {
+  return <div className='flex gap-1'>
+    <span style={{ backgroundColor: value.color }} className='w-2 h-2 rounded-full'></span>
+    <span>{value.label}</span>
+  </div>
+}
 
 
 function ContextField({ allTags }: { allTags: Tag[] }) {
@@ -66,24 +69,23 @@ function ContextField({ allTags }: { allTags: Tag[] }) {
       <TextInput
         required
         label="タイトル"
-        placeholder="Enter your name"
         onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
         value={form.values.name}
       />
-      <MultiSelect
-        required
-        label="タグ"
-        placeholder="set tags"
-        onChange={(value) => form.setFieldValue('tags', value)}
+      <SearchableMultiSelect <Tag>
+        itemComponent={itemComponent}
+        pillStyle={(item) => ({ root: { backgroundColor: item.color } })}
         value={form.values.tags}
         data={allTags}
+        onChange={(value) => form.setFieldValue('tags', value)}
       />
-
-      <FileUpload
-        endpoint='serverImage'
-        value={form.values.imageUrl}
-        onChange={(url) => { console.log(url); form.setFieldValue('imageUrl', url ?? '') }}
-      />
+      <Input.Wrapper label='ファイル' required>
+        <FileUpload
+          endpoint='serverImage'
+          value={form.values.imageUrl}
+          onChange={(url) => { console.log(url); form.setFieldValue('imageUrl', url ?? '') }}
+        />
+      </Input.Wrapper>
       <NumberInput
         required
         max={10}
@@ -108,27 +110,28 @@ function ContextField({ allTags }: { allTags: Tag[] }) {
 
 
 const ResistMysteryModal: React.FC<ResistMysteryModalProps> = (props) => {
-  const { tags ,mysteryCreated} = props;
+  const { tags } = props;
+  const router = useRouter()
   const convertedTags: Tag[] = tags.map((tag) => ({ value: String(tag.id), label: tag.name, color: tag.color }))
   const form = useForm({
     name: FORM,
     initialValues: {
-      name: '初めて',
-      imageUrl: 'https://utfs.io/f/b274cb97-6bd9-4980-a216-2a0800ae704b-1e.svg',
+      name: '',
+      imageUrl: '',
       difficulty: 1,
-      explanation: 'test',
-      answer: 'おしろ',
+      explanation: '',
+      answer: '',
       tags: [],
     },
     validate: zodResolver(schema),
   })
 
   const [opened, { open, close }] = useDisclosure();
-  const [visible, { toggle }] = useDisclosure();
+  const [visible, { toggle, close: finishLoading }] = useDisclosure();
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
-    console.log(values)
     const user = await getCurrentUser()
+    toggle()
 
     const payload = {
       tags: values.tags,
@@ -139,9 +142,16 @@ const ResistMysteryModal: React.FC<ResistMysteryModalProps> = (props) => {
       answer: values.answer,
       userId: user.userId
     }
+    console.log(payload)
     await createMystery(payload)
-    mysteryCreated?.()
+    notifications.show({
+      title: '完了',
+      message: '謎登録しました!',
+      autoClose: 5000,
+    })
+    finishLoading()
     close()
+    router.refresh()
   }
 
   return (
@@ -153,9 +163,9 @@ const ResistMysteryModal: React.FC<ResistMysteryModalProps> = (props) => {
           <FormProvider form={form}>
             <form onSubmit={form.onSubmit(onSubmit)}>
               <ContextField allTags={convertedTags} />
-              <div className='flex justify-evenly mt-1' style={{justifyContent:'space-evenly',marginTop:'16px'}}>
-                <Button type="submit" variant="light" color="blue">登録</Button>
+              <div className='flex justify-evenly mt-1' style={{ justifyContent: 'space-evenly', marginTop: '16px' }}>
                 <Button onClick={close} variant='outline'>閉じる</Button>
+                <Button type="submit" variant="light" color="blue">登録</Button>
               </div>
             </form>
           </FormProvider>

@@ -28,9 +28,9 @@ const UserMainPage: FC = async () => {
       <ClientOnly>
         <div className="flex h-full">
           <UserPageNav />
-          <div style={{ width: '-webkit-fill-available' }}>
+          <div className="grow">
             <UserPageHeader user={user} signed={true} tags={tags} />
-            <div className="m-1">
+            <div className="m-4">
               <Mysteries mysteries={mysteries} />
             </div>
           </div>

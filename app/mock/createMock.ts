@@ -1,114 +1,98 @@
 
 export const tags = [{
   name: '50音',
-  color: '#ffffff',
+  color: '#ccc6c6',
 },
 {
   name: '英語変換',
-  color: '#ffffff',
+  color: '#945c6f',
 },
 {
   name: 'ローマ字変換',
-  color: '#ffffff',
+  color: '#367abf',
 },
 {
   name: '対義語',
-  color: '#ffffff',
+  color: '#993cb0',
 },
 {
   name: '類義語',
-  color: '#ffffff',
+  color: '#82c91e',
 },
 {
   name: '頭/尻',
-  color: '#ffffff',
+  color: '#4d95a3',
 },
 {
   name: '逆から読む',
-  color: '#ffffff',
+  color: '#5c9987',
 },
 {
   name: '合体漢字',
-  color: '#ffffff',
+  color: '#b08627',
 },
 {
   name: 'ふりがな',
-  color: '#ffffff',
+  color: '#c26110',
 },
 {
   name: 'しりとり',
-  color: '#ffffff',
+  color: '#12b886',
 },
 {
   name: '十二支',
-  color: '#ffffff',
+  color: '#417867',
 },
 {
   name: '曜日',
-  color: '#ffffff',
+  color: '#9cf7db',
 },
 {
   name: '惑星',
-  color: '#ffffff',
+  color: '#76d5e3',
 },
 {
   name: '都道府県',
-  color: '#ffffff',
+  color: '#f52aae',
 },
 {
   name: '方角',
-  color: '#ffffff',
+  color: '#4f0635',
 },
 {
   name: '色',
-  color: '#ffffff',
+  color: '#575556',
 },
 {
   name: 'トランプ',
-  color: '#ffffff',
+  color: '#db97af',
 },
 {
   name: '音階',
-  color: '#ffffff',
+  color: '#bd1515',
 },
 {
   name: '四季',
-  color: '#ffffff',
+  color: '#a7c734',
 },
 {
   name: '時計',
-  color: '#ffffff',
+  color: '#9e7efc',
 },
 {
   name: '表彰台',
-  color: '#ffffff',
+  color: '#ecfcd4',
 },
 {
   name: 'デジタル数字',
-  color: '#ffffff',
+  color: '#302f2b',
 },
 {
   name: '対応表',
-  color: '#ffffff',
+  color: '#7d6e32',
 },
 {
   name: 'たぬき問題',
-  color: '#ffffff',
-},
-{
-  name: '',
-  color: '#ffffff',
-},
-{
-  name: '合体漢字',
-  color: '#ffffff',
-},
-{
-  name: 'ふりがな',
-  color: '#ffffff',
-},
-{
-  name: 'しりとり',
-  color: '#ffffff',
+  color: '#c2b79f',
 },
 ]

@@ -4,6 +4,7 @@ import { MysteryDetailModal } from '@/components/modals/MysteryDetailModal';
 import { useState } from 'react';
 import { Mystery } from '@/models/Mystery';
 import { useDisclosure } from '@mantine/hooks';
+import { skeleton } from '@/components/atoms/SkeltonForImage';
 
 
 export interface MysteriesProps {
@@ -20,9 +21,9 @@ function Mysteries({ mysteries }: MysteriesProps) {
           <div className='w-[150px]' key={mystery.id}>
             <div className='h-[180px] flex items-center'>
               <span onClick={() => { setSelectedMystery(mystery); open() }} className='align-middle'>
-                <Image priority={false} src={mystery.imageUrl} alt={mystery.title} width={300} height={200} className='object-contain' /></span>
+                <Image priority={false} src={mystery.imageUrl} alt={mystery.title} width={300} height={200} className='object-contain' placeholder={skeleton(100, 100)} /></span>
             </div>
-            <p>難易度: {mystery.difficulty}</p>
+            <div>難易度: {mystery.difficulty}</div>
           </div>
         ))}
       </div>

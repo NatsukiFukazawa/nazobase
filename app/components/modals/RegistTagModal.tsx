@@ -1,12 +1,13 @@
 'use client'
-import React, { useState } from 'react';
+import React from 'react';
 import * as z from 'zod'
-import { Modal, Button, TextInput, ColorInput, Text, LoadingOverlay } from '@mantine/core';
+import { Modal, Button, TextInput, ColorInput, LoadingOverlay } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { createFormActions, createFormContext } from '@mantine/form';
 import { zodResolver } from '@mantine/form';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { createTag } from '@/actions/createTag';
+import { useRouter } from 'next/navigation';
 
 interface ResistTagModalProps {
 }
@@ -46,7 +47,7 @@ function ContextField() {
       <TextInput
         required
         label="ラベル"
-        placeholder="Enter your name"
+        placeholder="入力してください"
         onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
         value={form.values.name}
       />
@@ -74,6 +75,7 @@ const ResistMysteryModal: React.FC<ResistTagModalProps> = (props) => {
     },
     validate: zodResolver(schema),
   })
+  const router = useRouter()
 
   const [opened, { open, close }] = useDisclosure();
   const [visible, { open: toggleOpen, close: toggleClose }] = useDisclosure();
@@ -89,11 +91,14 @@ const ResistMysteryModal: React.FC<ResistTagModalProps> = (props) => {
         color: values.color,
       }
       await createTag(payload)
+      router.refresh()
 
     } catch (e) {
       console.log(e)
     } finally {
+
       toggleClose()
+      close()
     }
   }
 
@@ -107,14 +112,14 @@ const ResistMysteryModal: React.FC<ResistTagModalProps> = (props) => {
             <form onSubmit={form.onSubmit(onSubmit)}>
               <ContextField />
               <div className='flex justify-center gap-5 mt-8' >
-                <Button type="submit" variant="light" color="blue">登録</Button>
                 <Button onClick={close} variant='outline'>閉じる</Button>
+                <Button type="submit" variant="light" color="blue">登録</Button>
               </div>
             </form>
           </FormProvider>
         </Modal.Body>
       </Modal>
-      <Button onClick={open} size='compact-sm' color='grape' variant='outline'>タグ登録</Button>
+      {/* <Button onClick={open} size='compact-sm' color='grape' variant='outline'>タグ登録</Button> */}
     </>
   );
 };
