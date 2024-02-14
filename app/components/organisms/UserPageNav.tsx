@@ -11,7 +11,7 @@ const collections = [
 
 export function UserPageNav() {
   const collectionLinks = collections.map((collection) => (
-    <div className="flex justify-start">
+    <div className="flex justify-start" key={collection.label}>
       <Link
         href={`/${collection.page}`}
         key={collection.label}
