@@ -5,31 +5,29 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// datasource db {
-//   provider = "postgresql"
-//   url      = env("DATABASE_URL")
-// }
-
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-
+// datasource db {
+//   provider     = "mysql"
+//   url          = env("DATABASE_URL")
+//   relationMode = "prisma"
+// }
 
 // schema.prisma
 
 // ユーザーテーブル
 model Profile {
-  id        Int        @id @default(autoincrement())
-  email     String     @unique
-  userId    String     @unique
-  name      String?
-  mysteries Mystery[]
-  createdAt DateTime   @default(now()) @map("createdAt")
-  updatedAt DateTime   @default(now()) @updatedAt @map("updatedAt")
-  favoriteMysteries  Favorite[]
+  id                Int        @id @default(autoincrement())
+  email             String     @unique
+  userId            String     @unique
+  name              String?
+  mysteries         Mystery[]
+  createdAt         DateTime   @default(now()) @map("createdAt")
+  updatedAt         DateTime   @default(now()) @updatedAt @map("updatedAt")
+  favoriteMysteries Favorite[]
 }
 
 // 謎テーブル
@@ -41,7 +39,7 @@ model Mystery {
   answer      String
   explanation String
   profileId   Int
-  profile     Profile       @relation(fields: [profileId], references: [id] ,onDelete: Cascade)
+  profile     Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
   tags        Tagging[] // 謎とタグの中間テーブルとの関連性を表現するリレーション
   createdAt   DateTime   @default(now()) @map("createdAt")
   updatedAt   DateTime   @default(now()) @updatedAt @map("updatedAt")
@@ -54,7 +52,7 @@ model Mystery {
 model Tag {
   id        Int       @id @default(autoincrement())
   name      String    @unique
-  color     String    
+  color     String
   taggings  Tagging[] // タグと謎の中間テーブルとの関連性を表現するリレーション
   createdAt DateTime  @default(now()) @map("createdAt")
   updatedAt DateTime  @default(now()) @updatedAt @map("updatedAt")
@@ -63,21 +61,23 @@ model Tag {
 // 謎とタグの中間テーブル
 model Tagging {
   id        Int      @id @default(autoincrement())
-  mystery   Mystery  @relation(fields: [mysteryId], references: [id],onDelete: Cascade)
-  tag       Tag      @relation(fields: [tagId], references: [id],onDelete: Cascade)
+  mystery   Mystery  @relation(fields: [mysteryId], references: [id], onDelete: Cascade)
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
   mysteryId Int
   tagId     Int
   createdAt DateTime @default(now()) @map("createdAt")
   updatedAt DateTime @updatedAt
+
+  @@unique([mysteryId, tagId])
   @@index([mysteryId])
   @@index([tagId])
-  @@unique([mysteryId, tagId])
 }
+
 // 謎とユーザーのお気に入りテーブル
 model Favorite {
   id        Int      @id @default(autoincrement())
-  mystery   Mystery  @relation(fields: [mysteryId], references: [id] ,onDelete: Cascade)
-  profile   Profile  @relation(fields: [profileId], references: [id] ,onDelete: Cascade)
+  mystery   Mystery  @relation(fields: [mysteryId], references: [id], onDelete: Cascade)
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
   mysteryId Int
   profileId Int
   createdAt DateTime @default(now())

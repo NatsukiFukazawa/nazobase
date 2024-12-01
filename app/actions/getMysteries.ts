@@ -1,6 +1,5 @@
-
 // import { getServerSession } from "next-auth/next"
-import prisma from '../services/prisma'
+import prisma from "../services/prisma"
 // import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 const getMysteries = async () => {
@@ -8,12 +7,11 @@ const getMysteries = async () => {
     include: {
       tags: {
         include: {
-          tag: true
-        }
+          tag: true,
+        },
       },
-    }
-  });
-  console.log(mysteries)
+    },
+  })
   return mysteries
 }
 

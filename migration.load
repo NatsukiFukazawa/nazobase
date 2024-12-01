@@ -1,0 +1,4 @@
+LOAD DATABASE
+    FROM mysql://by4rj6zm71erlfqt5k9y:pscale_pw_xVHqkMohrBJIF9rV9YCmWIW1h2lfIlf5NXlcVD9o1I4@aws.connect.psdb.cloud/nazobase?sslmode=require
+    INTO postgresql://postgres.jidudnylfjlvzwaphfte:Yuugioh929@aws-0-ap-northeast-1.pooler.supabase.com:5432/postgres
+ALTER SCHEMA 'nazobase' RENAME TO 'public' WITH QUOTE IDENTIFIERS, DATA ONLY, TRUNCATE, CREATE NO TABLES;

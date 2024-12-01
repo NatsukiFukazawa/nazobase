@@ -1,56 +1,48 @@
-'use client'
-import Link from "next/link";
-import { useState } from 'react';
-import { Group } from "@mantine/core";
-import Image from "next/image";
+"use client"
+import Link from "next/link"
+import { useState } from "react"
 import {
   IconSettings,
-  Icon2fa,
-  IconDatabaseImport,
-  IconReceipt2,
-  IconSwitchHorizontal,
   IconLogout,
   IconUser,
   IconListSearch,
-  IconTimeDuration10
-} from '@tabler/icons-react';
-import classes from './NavbarSimple.module.css';
+  IconTimeDuration10,
+} from "@tabler/icons-react"
+import classes from "./NavbarSimple.module.css"
 
 const data = [
-  { link: 'userpage', label: 'マイページ', icon: IconUser },
-  { link: '#', label: 'ランダム10問', icon: IconTimeDuration10 },
-  { link: '#', label: '謎検索', icon: IconListSearch },
-  { link: 'tag-setting', label: 'タグ設定', icon: IconSettings },
+  { link: "userpage", label: "マイページ", icon: IconUser },
+  { link: "#", label: "ランダム10問", icon: IconTimeDuration10 },
+  { link: "#", label: "謎検索", icon: IconListSearch },
+  { link: "tag-setting", label: "タグ設定", icon: IconSettings },
 ]
 
 export function UserPageNav() {
-  const [active, setActive] = useState('userpage');
+  const [active, setActive] = useState("userpage")
 
   const links = data.map((item) => (
     <Link
       className={classes.link}
       data-active={item.link === active || undefined}
-      href={'/' + item.link}
+      href={"/" + item.link}
       key={item.label}
-      onClick={(event) => {
-        setActive(item.label);
+      onClick={() => {
+        setActive(item.link)
       }}
     >
       <item.icon className={classes.linkIcon} stroke={1.5} />
       <span>{item.label}</span>
     </Link>
-  ));
+  ))
 
   return (
     <nav className={classes.navbar}>
       {/* <Group className={classes.header} justify="space-between">
         <Image src="/logo.svg" alt="logo" width={270} height={80} />
       </Group> */}
-      <div className={classes.navbarMain}>
-        {links}
-      </div>
+      <div className={classes.navbarMain}>{links}</div>
     </nav>
-  );
+  )
 }
 
 // export function UserPageNav() {
