@@ -20,7 +20,7 @@ export default async function Page() {
   }))
   return (
     <div>
-      <MysteryRandomSlider mysteries={mysteries} opened={true} />
+      <MysteryRandomSlider mysteries={mysteries} />
     </div>
   )
 }
