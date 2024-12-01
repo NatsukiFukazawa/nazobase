@@ -1,13 +1,16 @@
-import { NextResponse } from 'next/server';
-import prisma from '../../services/prisma'
+import { NextResponse } from "next/server"
+import prisma from "../../../services/prisma"
 
 interface IParams {
-  specificMysteryId: number;
+  specificMysteryId: number
   specificTagId: number
 }
 
 /**delete tag from mystery*/
-export async function DELETE(request:Request, { params }: { params: IParams }) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: IParams }
+) {
   const { specificMysteryId, specificTagId } = params
   const deleted = await prisma.tagging.delete({
     where: {
@@ -18,5 +21,4 @@ export async function DELETE(request:Request, { params }: { params: IParams }) {
     },
   })
   return NextResponse.json(deleted)
-};
-
+}

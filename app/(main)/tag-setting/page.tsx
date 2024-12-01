@@ -1,5 +1,5 @@
-import getTags from "@/actions/getTags"
-import { TagRow } from "@/components/organisms/TagRow"
+import getTags from "../../../actions/getTags"
+import { TagRow } from "../../../components/organisms/TagRow"
 import TmpButton from "./TmpButton"
 
 export default async function Page() {

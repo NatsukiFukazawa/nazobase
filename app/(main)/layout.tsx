@@ -1,7 +1,7 @@
-import { UserPageNav } from "@/components/organisms/UserPageNav"
-import { UserPageHeader } from "@/components/organisms/UserPageHeader"
-import ClientOnly from "@/components/ClientOnly"
-import getTags from "@/actions/getTags"
+import { UserPageNav } from "../../components/organisms/UserPageNav"
+import { UserPageHeader } from "../../components/organisms/UserPageHeader"
+import ClientOnly from "../../components/ClientOnly"
+import getTags from "../../actions/getTags"
 
 export default async function RootLayout({
   children,

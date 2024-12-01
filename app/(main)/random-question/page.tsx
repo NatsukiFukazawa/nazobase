@@ -1,12 +1,9 @@
-import { FC } from "react"
-import Mysteries from "../../../components/organisms/Mysteries"
-import { UserPageNav } from "../../../components/organisms/UserPageNav"
-import ClientOnly from "../../../components/ClientOnly"
+import prisma from "../../../services/prisma"
 import getMysteries from "../../../actions/getMysteries"
-import getTags from "../../../actions/getTags"
 import { Mystery } from "../../../models/Mystery"
+import Mysteries from "../../../components/organisms/Mysteries"
 
-const UserMainPage: FC = async () => {
+export default async function Page() {
   const res = await getMysteries()
   const mysteries: Mystery[] = res.map((mystery) => ({
     id: mystery.id,
@@ -21,13 +18,11 @@ const UserMainPage: FC = async () => {
       color: tag.tag.color,
     })),
   }))
+
   return (
-    <>
-      <div className="m-4">
-        <Mysteries mysteries={mysteries} />
-      </div>
-    </>
+    <div>
+      <h3>Random Question</h3>
+      <Mysteries mysteries={mysteries} />
+    </div>
   )
 }
-
-export default UserMainPage

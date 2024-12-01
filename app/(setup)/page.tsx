@@ -1,4 +1,4 @@
-import { initialProfile } from "../lib/initial-profile"
+import { initialProfile } from "../../lib/initial-profile"
 import { redirectToSignIn } from "@clerk/nextjs"
 import { redirect } from "next/navigation"
 
