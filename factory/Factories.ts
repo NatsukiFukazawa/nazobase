@@ -2,7 +2,7 @@ import { TaggingFactory } from "./Tagging"
 import { TagFactory } from "./Tag"
 import { MysteryFactory } from "./Mystery"
 import { ProfileFactory } from "./Profile"
-import { ModelName } from "../../scripts/createFactory"
+import { ModelName } from "@/scripts/createFactory"
 
 type Awaited<T> = T extends PromiseLike<infer U> ? U : T
 

@@ -1,5 +1,6 @@
 import getMysteries from "@/actions/getMysteries"
 import { Mystery } from "@/models/Mystery"
+import { Button } from "@mantine/core"
 import MysteryRandomSlider from "@/components/modals/MysteryRandomSlider"
 
 export default async function Page() {
@@ -19,7 +20,6 @@ export default async function Page() {
   }))
   return (
     <div>
-      <h3>Random Question</h3>
       <MysteryRandomSlider mysteries={mysteries} opened={true} />
     </div>
   )
