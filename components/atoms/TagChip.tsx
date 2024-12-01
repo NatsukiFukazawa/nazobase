@@ -1,7 +1,7 @@
 "use client"
 import { Badge } from "@mantine/core"
 import { Tag } from "@prisma/client"
-import { toRGB } from "../../utils/toRGB"
+import { toRGB } from "@/utils/toRGB"
 
 type PropsTag = Omit<Tag, "createdAt" | "updatedAt">
 

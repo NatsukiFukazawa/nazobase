@@ -1,7 +1,6 @@
-import prisma from "../../../services/prisma"
-import getMysteries from "../../../actions/getMysteries"
-import { Mystery } from "../../../models/Mystery"
-import Mysteries from "../../../components/organisms/Mysteries"
+import getMysteries from "@/actions/getMysteries"
+import { Mystery } from "@/models/Mystery"
+import MysteryRandomSlider from "@/components/modals/MysteryRandomSlider"
 
 export default async function Page() {
   const res = await getMysteries()
@@ -18,11 +17,10 @@ export default async function Page() {
       color: tag.tag.color,
     })),
   }))
-
   return (
     <div>
       <h3>Random Question</h3>
-      <Mysteries mysteries={mysteries} />
+      <MysteryRandomSlider mysteries={mysteries} opened={true} />
     </div>
   )
 }

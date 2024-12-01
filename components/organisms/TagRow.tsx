@@ -1,6 +1,6 @@
 "use client"
 import db from "@prisma/client"
-import { deleteTag } from "../../actions/deleteTag"
+import { deleteTag } from "@/actions/deleteTag"
 import { useRouter } from "next/navigation"
 import { Badge, Button } from "@mantine/core"
 

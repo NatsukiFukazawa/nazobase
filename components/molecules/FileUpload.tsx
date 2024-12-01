@@ -1,13 +1,9 @@
 "use client"
 
-import { UploadDropzone } from "../../utils/uploadthing"
-import { OurFileRouter } from "@/api/uploadthing/core"
+import { UploadDropzone } from "@/utils/uploadthing"
 import Image from "next/image"
 import { CloseButton } from "@mantine/core"
 
-function Demo() {
-  return
-}
 import "@uploadthing/react/styles.css"
 import { Button } from "@mantine/core"
 

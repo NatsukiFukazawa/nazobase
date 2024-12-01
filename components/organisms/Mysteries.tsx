@@ -1,10 +1,10 @@
 "use client"
 import Image from "next/image"
-import { MysteryDetailModal } from "../modals/MysteryDetailModal"
+import { MysteryDetailModal } from "@/components/modals/MysteryDetailModal"
 import { useState } from "react"
-import { Mystery } from "../../models/Mystery"
+import { Mystery } from "@/models/Mystery"
 import { useDisclosure } from "@mantine/hooks"
-import { skeleton } from "../atoms/SkeltonForImage"
+import { skeleton } from "@/components/atoms/SkeltonForImage"
 
 export interface MysteriesProps {
   mysteries: Mystery[]

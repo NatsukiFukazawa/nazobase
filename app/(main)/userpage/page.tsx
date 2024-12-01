@@ -1,10 +1,7 @@
 import { FC } from "react"
-import Mysteries from "../../../components/organisms/Mysteries"
-import { UserPageNav } from "../../../components/organisms/UserPageNav"
-import ClientOnly from "../../../components/ClientOnly"
-import getMysteries from "../../../actions/getMysteries"
-import getTags from "../../../actions/getTags"
-import { Mystery } from "../../../models/Mystery"
+import Mysteries from "@/components/organisms/Mysteries"
+import getMysteries from "@/actions/getMysteries"
+import { Mystery } from "@/models/Mystery"
 
 const UserMainPage: FC = async () => {
   const res = await getMysteries()

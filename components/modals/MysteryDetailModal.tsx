@@ -1,3 +1,6 @@
+import { useRouter } from "next/navigation"
+import Image from "next/image"
+
 import {
   Modal,
   LoadingOverlay,
@@ -7,13 +10,12 @@ import {
   Stack,
 } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
-import { Mystery } from "../../models/Mystery"
-import { useRouter } from "next/navigation"
-import Image from "next/image"
-import { TagChip } from "../atoms/TagChip"
-import { deleteMystery } from "../../actions/deleteMystery"
-import { skeleton } from "../atoms/SkeltonForImage"
 import { notifications } from "@mantine/notifications"
+
+import { Mystery } from "@/models/Mystery"
+import { deleteMystery } from "@/actions/deleteMystery"
+import { TagChip } from "@/components/atoms/TagChip"
+import { skeleton } from "@/components/atoms/SkeltonForImage"
 
 interface MysteryDetailModalProps {
   mystery: Mystery | null

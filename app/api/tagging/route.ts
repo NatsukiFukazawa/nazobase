@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import prisma from "../../../services/prisma"
+import prisma from "@/services/prisma"
 
 interface IParams {
   specificMysteryId: number
