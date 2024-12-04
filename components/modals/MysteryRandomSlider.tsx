@@ -13,37 +13,33 @@ import {
 } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import { notifications } from "@mantine/notifications"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Mystery } from "@/models/Mystery"
-import { TagChip } from "@/components/atoms/TagChip"
 import { skeleton } from "@/components/atoms/SkeltonForImage"
 
-interface MysteryRandomSliderProps {
-  mysteries: Mystery[]
-}
+export default function MysteryRandomSlider() {
+  const [mysteries, setMysteries] = useState<Mystery[]>([])
 
-export default function MysteryRandomSlider({
-  mysteries,
-}: MysteryRandomSliderProps) {
+  // for random question
   const [opened, { toggle, close }] = useDisclosure()
   const [inputAnswer, setAnswer] = useState<string>("")
-  const [currentMystery, setCurrentMystery] = useState<Mystery>(
-    mysteries[Math.floor(Math.random() * mysteries.length)]
-  )
-  const input = useRef<HTMLInputElement>(null)
-
+  const [currentMystery, setCurrentMystery] = useState<Mystery | null>(null)
+  const [prevMystery, setPrevMystery] = useState<Mystery | null>(null)
   const [nonAnsweredIndices, setNonAnsweredIndices] = useState<number[]>(
     new Array(mysteries.length).fill(0).map((_, i) => i)
   )
-  const { title, imageUrl, difficulty, answer } = currentMystery
+
+  // for input focus
+  const input = useRef<HTMLInputElement>(null)
+
+  // update current mystery when currentMystery is changed
+  if (prevMystery !== currentMystery) {
+    setPrevMystery(currentMystery)
+    setAnswer("")
+  }
   const checkAnswer = () => {
     console.log(inputAnswer, answer)
     if (inputAnswer === answer) {
-      notifications.show({
-        title: "正解",
-        message: "正解です!",
-        autoClose: 5000,
-      })
       if (nonAnsweredIndices.length === 1) {
         notifications.show({
           title: "全問正解",
@@ -51,14 +47,19 @@ export default function MysteryRandomSlider({
           autoClose: 5000,
         })
         close()
+      } else {
+        notifications.show({
+          title: "正解",
+          message: "正解です!",
+          autoClose: 5000,
+        })
       }
       const currentMysteryIndex = mysteries.findIndex(
-        (m) => m.id === currentMystery.id
+        (m) => m.id === currentMystery!.id
       )
-      console.log(currentMysteryIndex)
-      setNonAnsweredIndices(
-        nonAnsweredIndices.filter((i) => i !== currentMysteryIndex)
-      )
+      console.log(currentMysteryIndex, nonAnsweredIndices.length)
+      setNonAnsweredIndices(nonAnsweredIndices.splice(currentMysteryIndex, 1))
+      console.log(nonAnsweredIndices.length)
       const nextIndex =
         nonAnsweredIndices[
           Math.floor(Math.random() * nonAnsweredIndices.length)
@@ -75,24 +76,52 @@ export default function MysteryRandomSlider({
       })
     }
   }
-  const [prevMystery, setPrevMystery] = useState<Mystery | null>(null)
-  if (prevMystery !== currentMystery) {
-    setPrevMystery(currentMystery)
-    setAnswer("")
+  const questionStart = async () => {
+    const res = await fetch("/api/mystery")
+    const data: any[] = await res.json()
+    const mysteries: Mystery[] = data.map((mystery) => ({
+      id: mystery.id,
+      imageUrl: mystery.imageUrl,
+      title: mystery.title,
+      difficulty: mystery.difficulty,
+      explanation: mystery.explanation,
+      answer: mystery.answer,
+      tags: mystery.tags.map((tag: any) => ({
+        id: tag.tag.id,
+        name: tag.tag.name,
+        color: tag.tag.color,
+      })),
+    }))
+    setMysteries(mysteries)
+    setCurrentMystery(mysteries[Math.floor(Math.random() * mysteries.length)])
+    toggle()
   }
+
+  const { title, imageUrl, difficulty, answer } = (() => {
+    if (!currentMystery) {
+      return {
+        title: "",
+        imageUrl: "",
+        difficulty: "",
+        answer: "",
+      }
+    }
+    return currentMystery
+  })()
+
   return (
     <>
+      <div className="w-full text-center m-1">
+        <Button onClick={questionStart} variant="light" size="md">
+          start!
+        </Button>
+      </div>
       <Modal opened={opened} onClose={close} fullScreen>
         <Modal.Title className="flex text-center w-full justify-center font-bold border-gray-100">
           残り:{nonAnsweredIndices.length}問
         </Modal.Title>
         <Modal.Body className="text-center">
           {title}
-          <LoadingOverlay
-            visible={true}
-            zIndex={1000}
-            overlayProps={{ radius: "sm", blur: 2 }}
-          />
           <div>
             <div className="flex justify-center mt-2 h-[60vh]">
               <Image

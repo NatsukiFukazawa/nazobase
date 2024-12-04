@@ -13,6 +13,8 @@ import {
 import { ClerkProvider } from "@clerk/nextjs"
 import { Notifications } from "@mantine/notifications"
 
+import QueryProvider from "./QueryProvider"
+
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
@@ -51,10 +53,12 @@ export default function RootLayout({
           <ColorSchemeScript />
         </head>
         <body className={inter.className}>
-          <MantineProvider forceColorScheme="dark" theme={theme}>
-            {children}
-            <Notifications />
-          </MantineProvider>
+          <QueryProvider>
+            <MantineProvider forceColorScheme="dark" theme={theme}>
+              {children}
+              <Notifications />
+            </MantineProvider>
+          </QueryProvider>
         </body>
       </html>
     </ClerkProvider>
